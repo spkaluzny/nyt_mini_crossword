@@ -1,0 +1,79 @@
+---
+title: "New York Time Mini Crossword"
+author: "Stephen Kaluzny"
+date: "August 11, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## The Puzzle
+
+Everyday the New York Times puts out a mini crossword.
+
+## Setup
+```{r load_packages}
+if(!requireNamespace("tidyverse", quietly=TRUE)) {
+  install.packages("tidyverse")
+}
+library("tidyverse", quietly = TRUE, warn.conflicts = FALSE)
+```
+  
+## The Data
+
+```{r read_data}
+d <- read.csv("nyt.csv", stringsAsFactors=FALSE)
+```
+
+Clean the data by dropping Player SKK, there is only one observation
+at this time.
+
+```{r clean}
+nrow(d)
+d <- d %>%
+  filter(Player != "SKK")
+nrow(d)
+```
+```{r date_time}
+library("lubridate", quietly= TRUE)  # for working with date-time data
+d$Date <- as.Date(d$Date)
+d$WeekDay <- wday(d$Date)
+d$Seconds <- with(d, as.numeric(seconds(ms(Time))))
+```
+
+## Summary Statistics
+
+```{r summary}
+d %>% group_by(Player) %>%
+  summarise(Mean = mean(Seconds), Median = median(Seconds), Min = min(Seconds), Max = max(Seconds), N=n())
+```
+
+## Plots
+
+An Initial plot of the data.
+
+```{r plot01, echo=FALSE}
+d %>%
+  ggplot(aes(x=WeekDay, y=Seconds)) +
+    geom_point() +
+    ggtitle("Time vs Day of the Week")
+```
+
+Same plot with player identified.
+
+```{r plot02, echo=FALSE}
+d %>%
+  ggplot(aes(x=WeekDay, y=Seconds, color=Player)) +
+    geom_point() +
+    ggtitle("Time vs Day of the Week")
+```
+
+The distribution of the times, summarised in a boxplot:
+
+```{r plot03, echo=FALSE}
+d %>%
+  ggplot(aes(x=WeekDay, y=Seconds, group=WeekDay)) +
+    geom_boxplot() +
+    ggtitle("Time vs Day of the Week")
