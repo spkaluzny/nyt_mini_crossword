@@ -77,3 +77,21 @@ d %>%
   ggplot(aes(x=WeekDay, y=Seconds, group=WeekDay)) +
     geom_boxplot() +
     ggtitle("Time vs Day of the Week")
+```
+
+```{r spread01}
+spkjak <- function(x) {
+  m <- match(c("SPK","JAK"), x, nomatch=-1)
+  if(all(m > 0)) {
+      "SPKJAK"
+  } else {
+      NA
+  }
+}
+d2 <- group_by(d, Date) %>%
+  mutate(SPKJAK = spkjak(Player)) %>%
+  ungroup()
+```
+```{r spread00}
+d3 <- d %>% group_by(Date) %>% spread(key=Player, value=Seconds) %>% ungroup()
+```
