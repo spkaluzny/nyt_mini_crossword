@@ -27,13 +27,14 @@ library("tidyverse", quietly = TRUE, warn.conflicts = FALSE)
 d <- read.csv("nyt.csv", stringsAsFactors=FALSE)
 ```
 
-Clean the data by dropping Player SKK, there is only one observation
-at this time.
+Clean the data by only working with observations from
+`SPK`, `JAK` and `JIK`.
+Other players donot have enough observations to analyze.
 
 ```{r clean}
 nrow(d)
 d <- d %>%
-  filter(Player != "SKK")
+  filter(Player %in% c("SPK", "JAK", "JIK"))
 nrow(d)
 ```
 ```{r date_time}
@@ -90,8 +91,12 @@ spkjak <- function(x) {
 }
 d2 <- group_by(d, Date) %>%
   mutate(SPKJAK = spkjak(Player)) %>%
-  ungroup()
+  ungroup() %>%
+  filter(SPKJAK == "SPKJAK")
 ```
 ```{r spread00}
-d3 <- d %>% group_by(Date) %>% spread(key=Player, value=Seconds) %>% ungroup()
+d3 <- d2 %>% select(Date, Player, Seconds) %>%
+  group_by(Date) %>%
+  spread(key=Player, value=Seconds) %>%
+  ungroup()
 ```
