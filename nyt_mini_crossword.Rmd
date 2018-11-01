@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "August 11, 2018"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 ---
 
@@ -39,8 +39,9 @@ nrow(d)
 ```
 ```{r date_time}
 library("lubridate", quietly= TRUE)  # for working with date-time data
-d$Date <- as.Date(d$Date)
-d$WeekDay <- wday(d$Date)
+d$DateTime <- as.POSIXct(with(d,
+  paste(Date, ifelse(is.na(TimeOfDay), "00:00", TimeOfDay))))
+d$WeekDay <- wday(d$DateTime)
 d$Seconds <- with(d, as.numeric(seconds(ms(Time))))
 ```
 
@@ -58,7 +59,7 @@ An Initial plot of the data.
 ```{r plot01, echo=FALSE}
 d %>%
   ggplot(aes(x=WeekDay, y=Seconds)) +
-    geom_point() +
+    geom_jitter(position = position_jitter(width=.3)) +
     ggtitle("Time vs Day of the Week")
 ```
 
