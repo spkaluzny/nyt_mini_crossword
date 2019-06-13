@@ -15,10 +15,21 @@ Everyday the New York Times puts out a mini crossword.
 
 ## Setup
 ```{r load_packages}
-if(!requireNamespace("tidyverse", quietly=TRUE)) {
-  install.packages("tidyverse")
+if(!requireNamespace("dplyr", quietly=TRUE)) {
+  install.packages("dplyr")
 }
-library("tidyverse", quietly = TRUE, warn.conflicts = FALSE)
+if(!requireNamespace("tidyr", quietly=TRUE)) {
+  install.packages("tidyr")
+}
+if(!requireNamespace("ggplot2", quietly=TRUE)) {
+  install.packages("ggplot2")
+}
+if(!requireNamespace("lubridate", quietly=TRUE)) {
+  install.packages("lubridate")
+}
+library("tidyr", quietly = TRUE, warn.conflicts = FALSE)
+library("dplyr", quietly = TRUE, warn.conflicts = FALSE)
+library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
 ```
   
 ## The Data
@@ -27,30 +38,48 @@ library("tidyverse", quietly = TRUE, warn.conflicts = FALSE)
 d <- read.csv("nyt.csv", stringsAsFactors=FALSE)
 ```
 
-Clean the data by only working with observations from
-`SPK`, `JAK` and `JIK`.
-Other players donot have enough observations to analyze.
-
-```{r clean}
-nrow(d)
-d <- d %>%
-  filter(Player %in% c("SPK", "JAK", "JIK"))
-nrow(d)
-```
+Convert to dates, time-of-day and seconds
 ```{r date_time}
-library("lubridate", quietly= TRUE)  # for working with date-time data
 d$DateTime <- as.POSIXct(with(d,
   paste(Date, ifelse(is.na(TimeOfDay), "00:00", TimeOfDay))))
-d$WeekDay <- wday(d$DateTime)
-d$Seconds <- with(d, as.numeric(seconds(ms(Time))))
+d$WeekDay <- lubridate::wday(d$DateTime)
+d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
 ```
 
+### Data Quality Check
+
+Check that Player is one of 5 possible values:
+```{r data_verification_1}
+stopifnot(all(d[["Player"]] %in% c("SPK", "JAK", "JIK", "BBK", "SKK")))
+```
+
+Check for missing values
+```{r data_verification_2}
+stopifnot(all(!is.na(d[["DateTime"]])))
+stopifnot(all(!is.na(d[["WeekDay"]])))
+stopifnot(all(!is.na(d[["Seconds"]])))
+```
 ## Summary Statistics
+
+Current data set has `r nrow(d)` observations.
 
 ```{r summary}
 d %>% group_by(Player) %>%
   summarise(Mean = mean(Seconds), Median = median(Seconds), Min = min(Seconds), Max = max(Seconds), N=n())
 ```
+
+## Subset the Data
+
+Subset the data by only working with observations from
+`SPK`, `JAK` and `JIK`.
+Other players do not have enough observations to analyze.
+
+```{r subset}
+d <- d %>%
+  filter(Player %in% c("SPK", "JAK", "JIK"))
+```
+
+Now have `r nrow(d)` observations.
 
 ## Plots
 
@@ -81,7 +110,7 @@ d %>%
     ggtitle("Time vs Day of the Week")
 ```
 
-```{r spread01}
+```{r spread01, eval=FALSE}
 spkjak <- function(x) {
   m <- match(c("SPK","JAK"), x, nomatch=-1)
   if(all(m > 0)) {
@@ -95,7 +124,7 @@ d2 <- group_by(d, Date) %>%
   ungroup() %>%
   filter(SPKJAK == "SPKJAK")
 ```
-```{r spread00}
+```{r spread02, eval=FALSE}
 d3 <- d2 %>% select(Date, Player, Seconds) %>%
   group_by(Date) %>%
   spread(key=Player, value=Seconds) %>%
