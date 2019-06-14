@@ -59,6 +59,15 @@ stopifnot(all(!is.na(d[["DateTime"]])))
 stopifnot(all(!is.na(d[["WeekDay"]])))
 stopifnot(all(!is.na(d[["Seconds"]])))
 ```
+Only one observation per player per date
+```{r data_verification_3}
+d %>% group_by(Date) %>% count(Player) %>% mutate(IsOne = n == 1) %>%
+  pull(IsOne) %>% all() %>% stopifnot()
+```
+Check for proper values
+```{r data_verification_4}
+stopifnot(all(d[["Seconds"]] > 0))
+```
 ## Summary Statistics
 
 Current data set has `r nrow(d)` observations.
