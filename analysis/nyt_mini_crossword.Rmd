@@ -27,6 +27,9 @@ if(!requireNamespace("ggplot2", quietly=TRUE)) {
 if(!requireNamespace("lubridate", quietly=TRUE)) {
   install.packages("lubridate")
 }
+if(!requireNamespace("here", quietly=TRUE)) {
+  install.packages("here")
+}
 library("tidyr", quietly = TRUE, warn.conflicts = FALSE)
 library("dplyr", quietly = TRUE, warn.conflicts = FALSE)
 library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
@@ -35,7 +38,7 @@ library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
 ## The Data
 
 ```{r read_data}
-d <- read.csv("nyt.csv", stringsAsFactors=FALSE)
+d <- read.csv(here::here("data", "nyt.csv"), stringsAsFactors=FALSE)
 ```
 
 Convert to dates, time-of-day and seconds
