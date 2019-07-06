@@ -30,6 +30,9 @@ if(!requireNamespace("lubridate", quietly=TRUE)) {
 if(!requireNamespace("here", quietly=TRUE)) {
   install.packages("here")
 }
+if(!requireNamespace("assertr", quietly=TRUE)) {
+  install.packages("assertr")
+}
 library("tidyr", quietly = TRUE, warn.conflicts = FALSE)
 library("dplyr", quietly = TRUE, warn.conflicts = FALSE)
 library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
@@ -69,7 +72,7 @@ d %>% group_by(Date) %>% count(Player) %>% mutate(IsOne = n == 1) %>%
 ```
 Check for proper values
 ```{r data_verification_4}
-stopifnot(all(d[["Seconds"]] > 0))
+d %>% assertr::verify(Seconds > 0)
 ```
 ## Summary Statistics
 
