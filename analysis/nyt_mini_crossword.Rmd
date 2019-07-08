@@ -33,6 +33,7 @@ if(!requireNamespace("here", quietly=TRUE)) {
 if(!requireNamespace("assertr", quietly=TRUE)) {
   install.packages("assertr")
 }
+library("assertr", quietly = TRUE, warn.conflicts = FALSE)
 library("tidyr", quietly = TRUE, warn.conflicts = FALSE)
 library("dplyr", quietly = TRUE, warn.conflicts = FALSE)
 library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
@@ -54,17 +55,21 @@ d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
 
 ### Data Quality Check
 
+Current list of players:
+```{r players}
+players <- c("SPK", "JAK", "JIK", "BBK", "SKK")
+```
+
 Check that Player is one of 5 possible values:
 ```{r data_verification_1}
-stopifnot(all(d[["Player"]] %in% c("SPK", "JAK", "JIK", "BBK", "SKK")))
+d %>% assert(in_set(players), Player)
 ```
 
 Check for missing values
 ```{r data_verification_2}
-stopifnot(all(!is.na(d[["DateTime"]])))
-stopifnot(all(!is.na(d[["WeekDay"]])))
-stopifnot(all(!is.na(d[["Seconds"]])))
+d %>% assert(not_na, DateTime, WeekDay, Seconds)
 ```
+
 Only one observation per player per date
 ```{r data_verification_3}
 d %>% group_by(Date) %>% count(Player) %>% mutate(IsOne = n == 1) %>%
