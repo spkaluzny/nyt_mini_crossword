@@ -50,6 +50,7 @@ Convert to dates, time-of-day and seconds
 d$DateTime <- as.POSIXct(with(d,
   paste(Date, ifelse(is.na(TimeOfDay), "00:00", TimeOfDay))))
 d$WeekDay <- lubridate::wday(d$DateTime)
+d$Date <- as.Date(d$Date)
 d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
 ```
 
@@ -62,23 +63,32 @@ players <- c("SPK", "JAK", "JIK", "BBK", "SKK")
 
 Check that Player is one of 5 possible values:
 ```{r data_verification_1}
-d %>% assert(in_set(players), Player)
+d %>% assert(in_set(players), Player) %>% success_logical()
 ```
 
 Check for missing values
 ```{r data_verification_2}
-d %>% assert(not_na, DateTime, WeekDay, Seconds)
+d %>% assert(not_na, DateTime, WeekDay, Seconds) %>% success_logical()
 ```
 
 Only one observation per player per date
 ```{r data_verification_3}
-d %>% group_by(Date) %>% count(Player) %>% mutate(IsOne = n == 1) %>%
-  pull(IsOne) %>% all() %>% stopifnot()
+d %>% group_by(Date) %>% count(Player) %>% verify(n == 1) %>% success_logical()
 ```
+
 Check for proper values
 ```{r data_verification_4}
-d %>% assertr::verify(Seconds > 0)
+d %>% assertr::verify(Seconds > 0) %>% success_logical()
 ```
+
+Check range of dates
+```{r data_verification_5}
+first_date <- as.Date("2017-09-25")
+today <- Sys.Date()
+d %>% 
+  assertr::verify(Date >= first_date & Date <= today) %>% success_logical()
+```
+
 ## Summary Statistics
 
 Current data set has `r nrow(d)` observations.
