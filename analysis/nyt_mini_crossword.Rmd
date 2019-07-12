@@ -56,9 +56,19 @@ d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
 
 ### Data Quality Check
 
-Current list of players:
-```{r players}
+New data is regularly added to the CSV data file.
+In this section we do a quality check on the data to make sure no
+data entry errors have occurred.
+
+First, set some values that are expected in the data:
+
+```{r data_verification_0}
+# Current list of players:
 players <- c("SPK", "JAK", "JIK", "BBK", "SKK")
+# Earliest date:
+first_date <- as.Date("2017-09-25")
+# Upper bound on time (10 minutes = 600 seconds):
+time_bound <- 600
 ```
 
 Check that Player is one of 5 possible values:
@@ -66,19 +76,19 @@ Check that Player is one of 5 possible values:
 d %>% assert(in_set(players), Player) %>% success_logical()
 ```
 
-Check for missing values
+There should be no missing values in the data:
 ```{r data_verification_2}
 d %>% assert(not_na, DateTime, WeekDay, Seconds) %>% success_logical()
 ```
 
-Only one observation per player per date
+Only one observation per player per date:
 ```{r data_verification_3}
 d %>% group_by(Date) %>% count(Player) %>% verify(n == 1) %>% success_logical()
 ```
 
-Check for proper values
+Check for proper time values:
 ```{r data_verification_4}
-d %>% assertr::verify(Seconds > 0) %>% success_logical()
+d %>% assertr::verify(Seconds > 0 & Seconds < time_bound) %>% success_logical()
 ```
 
 Check range of dates
