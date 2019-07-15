@@ -12,8 +12,24 @@ knitr::opts_chunk$set(echo = TRUE)
 ## The Puzzle
 
 Everyday the New York Times puts out a mini crossword.
+A group of us have been recording our time to complete the puzzle everytime
+we complete a puzzle.
+Along with the date and time we also record the time of day that we did the
+puzzle.
+
+This is an analysis of that puzzle data.
+We look at puzzle completion time across the various players,
+across day of the week (are the puzzles harder later in the week?)
+and time of day.
+This is also an example data analysis done with R in a reproducible manner.
+As an example document for learning about R,
+all of the R code is shown.
 
 ## Setup
+
+We explicitly install the required R packages from CRAN if they
+are not already available.
+
 ```{r load_packages}
 if(!requireNamespace("dplyr", quietly=TRUE)) {
   install.packages("dplyr")
@@ -41,11 +57,16 @@ library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
   
 ## The Data
 
+The `here` package allows us to find files (in this case the raw data file)
+anywhere within the project tree.
+
 ```{r read_data}
 d <- read.csv(here::here("data", "nyt.csv"), stringsAsFactors=FALSE)
 ```
-
-Convert to dates, time-of-day and seconds
+The `Date` and `TimeOfDay` are converted to a `POSIX` variable `DateTime`.
+The `WeekDay` is then computed from `DateTime`.
+The puzzle time (`Time`) was recorded as minutes:seconds,
+we convert that to a numeric `Seconds` variable.
 ```{r date_time}
 d$DateTime <- as.POSIXct(with(d,
   paste(Date, ifelse(is.na(TimeOfDay), "00:00", TimeOfDay))))
@@ -125,7 +146,7 @@ Now have `r nrow(d)` observations.
 
 An Initial plot of the data.
 
-```{r plot01, echo=FALSE}
+```{r plot01}
 d %>%
   ggplot(aes(x=WeekDay, y=Seconds)) +
     geom_jitter(position = position_jitter(width=.3)) +
@@ -134,10 +155,10 @@ d %>%
 
 Same plot with player identified.
 
-```{r plot02, echo=FALSE}
+```{r plot02}
 d %>%
   ggplot(aes(x=WeekDay, y=Seconds, color=Player)) +
-    geom_point() +
+    geom_jitter(position = position_jitter(width=.3)) +
     ggtitle("Time vs Day of the Week")
 ```
 
@@ -169,4 +190,12 @@ d3 <- d2 %>% select(Date, Player, Seconds) %>%
   group_by(Date) %>%
   spread(key=Player, value=Seconds) %>%
   ungroup()
+```
+
+## Appendix
+Knowing the versions of R and the packages used in an analysis is
+an important part of reproducibility.
+The `sessionInfo` function will show this.
+```{r session_info}
+sessionInfo()
 ```
