@@ -43,6 +43,9 @@ if(!requireNamespace("ggplot2", quietly=TRUE)) {
 if(!requireNamespace("lubridate", quietly=TRUE)) {
   install.packages("lubridate")
 }
+if(!requireNamespace("hms", quietly=TRUE)) {
+  install.packages("hms")
+}
 if(!requireNamespace("here", quietly=TRUE)) {
   install.packages("here")
 }
@@ -63,7 +66,8 @@ anywhere within the project tree.
 ```{r read_data}
 d <- read.csv(here::here("data", "nyt.csv"), stringsAsFactors=FALSE)
 ```
-The `Date` and `TimeOfDay` are converted to a `POSIX` variable `DateTime`.
+
+The `Date` and `TimeOfDay` are combined and converted to a `POSIX` variable `DateTime`.
 The `WeekDay` is then computed from `DateTime`.
 The puzzle time (`Time`) was recorded as minutes:seconds,
 we convert that to a numeric `Seconds` variable.
@@ -72,6 +76,7 @@ d$Date <- as.Date(d$Date)
 d$DateTime <- as.POSIXct(with(d,
   paste(Date, ifelse(is.na(TimeOfDay), "00:00", TimeOfDay))))
 d$WeekDay <- lubridate::wday(d$DateTime)
+d$TimeOfDay2 <- hms::parse_hm(d$TimeOfDay)
 d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
 ```
 
