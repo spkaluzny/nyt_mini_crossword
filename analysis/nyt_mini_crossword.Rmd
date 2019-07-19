@@ -68,10 +68,10 @@ The `WeekDay` is then computed from `DateTime`.
 The puzzle time (`Time`) was recorded as minutes:seconds,
 we convert that to a numeric `Seconds` variable.
 ```{r date_time}
+d$Date <- as.Date(d$Date)
 d$DateTime <- as.POSIXct(with(d,
   paste(Date, ifelse(is.na(TimeOfDay), "00:00", TimeOfDay))))
 d$WeekDay <- lubridate::wday(d$DateTime)
-d$Date <- as.Date(d$Date)
 d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
 ```
 
