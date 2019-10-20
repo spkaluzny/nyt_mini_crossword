@@ -76,8 +76,18 @@ d$Date <- as.Date(d$Date)
 d$DateTime <- as.POSIXct(with(d,
   paste(Date, ifelse(is.na(TimeOfDay), "00:00", TimeOfDay))))
 d$WeekDay <- lubridate::wday(d$DateTime)
-d$TimeOfDay2 <- hms::parse_hm(d$TimeOfDay)
+d$TimeOfDayOrig <- d$TimeOfDay
+d$TimeOfDay <- hms::parse_hm(d$TimeOfDay)
 d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
+```
+
+Compute the time interval, in days, between puzzle playing by `Player`.
+```{r waiting_time}
+d <- d %>%
+  group_by(Player) %>%
+  arrange(Date) %>%
+  mutate(WaitingTime = as.numeric(Date - lag(Date), units="days")) %>%
+  ungroup()
 ```
 
 ### Data Quality Check
@@ -131,7 +141,8 @@ Current data set has `r nrow(d)` observations.
 
 ```{r summary}
 d %>% group_by(Player) %>%
-  summarise(Mean = mean(Seconds), Median = median(Seconds), Min = min(Seconds), Max = max(Seconds), N=n())
+  summarise(Mean = mean(Seconds), Median = median(Seconds), Min = min(Seconds), Max = max(Seconds), N=n()) %>%
+  arrange(Median)
 ```
 
 ## Subset the Data
