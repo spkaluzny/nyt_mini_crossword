@@ -100,7 +100,7 @@ First, set some values that are expected in the data:
 
 ```{r data_verification_0}
 # Current list of players:
-players <- c("SPK", "JAK", "JIK", "BBK", "SKK")
+players <- c("SPK", "JAK", "JIK", "BBK", "SKK", "AKK")
 # Earliest date:
 first_date <- as.Date("2017-09-25")
 # Upper bound on time (10 minutes = 600 seconds):
@@ -187,7 +187,24 @@ d %>%
     ggtitle("Time vs Day of the Week")
 ```
 
-```{r spread01, eval=FALSE}
+## Days Between Puzzles
+
+```{r plot04}
+d %>%
+  ggplot(aes(x=Date, y=WaitingTime, color=Player)) +
+    geom_point()
+```
+
+```{r plot05}
+d %>%
+  ggplot(aes(x=Date, y=WaitingTime)) +
+    geom_point() +
+    facet_grid(Player ~ ., scales="free")
+```
+
+## Player vs Player
+```{r spread01}
+# spkjak -----
 spkjak <- function(x) {
   m <- match(c("SPK","JAK"), x, nomatch=-1)
   if(all(m > 0)) {
@@ -200,6 +217,10 @@ d2 <- group_by(d, Date) %>%
   mutate(SPKJAK = spkjak(Player)) %>%
   ungroup() %>%
   filter(SPKJAK == "SPKJAK")
+```
+```{r spk_vs_jak}
+d2 %>% filter(Player %in% c("SPK", "JAK")) %>%
+  ggplot(aes(x=Date, y=Seconds, color=Player)) + geom_point()
 ```
 ```{r spread02, eval=FALSE}
 d3 <- d2 %>% select(Date, Player, Seconds) %>%
