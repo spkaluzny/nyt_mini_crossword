@@ -4,7 +4,7 @@ Observations are:
 person,date,puzzle_time,time_of_day
 
 Read with:
-```R
+```r
 d <- read.csv(here::here("data", "nyt.csv"), stringsAsFactors=FALSE)
 ```
 And then this do.
