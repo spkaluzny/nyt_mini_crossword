@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "17 October, 2020"
+date: "12 November, 2020"
 output:
   html_document:
     keep_md: true
@@ -167,7 +167,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 973 observations.
+Current data set has 983 observations.
 
 
 ```r
@@ -184,12 +184,12 @@ d %>% group_by(Player) %>%
 ## # A tibble: 6 x 6
 ##   Player  Mean Median   Min   Max     N
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
-## 1 SKK     51       47    21    89     4
-## 2 AKK     55       55    55    55     1
-## 3 JIK     82.6     62    13   264   187
-## 4 SPK    106.      87    18   455   414
-## 5 JAK    104.      89    27   454   313
-## 6 BBK    117.     102    42   350    54
+## 1 SKK     51     47      21    89     4
+## 2 AKK     55     55      55    55     1
+## 3 JIK     82.5   62      13   264   188
+## 4 SPK    106.    87      18   455   416
+## 5 JAK    104.    87.5    27   454   320
+## 6 BBK    117.   102      42   350    54
 ```
 
 ## Subset the Data
@@ -204,7 +204,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 914 observations.
+Now have 924 observations.
 
 ## Plots
 
@@ -309,10 +309,10 @@ sessionInfo()
 ```
 ## R version 4.0.2 (2020-06-22)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 18.04.5 LTS
+## Running under: Ubuntu 20.04.1 LTS
 ## 
 ## Matrix products: default
-## BLAS:   /usr/lib/x86_64-linux-gnu/libf77blas.so.3.10.3
+## BLAS:   /home/R/R-4.0.2/lib/R/lib/libRblas.so
 ## LAPACK: /home/R/R-4.0.2/lib/R/lib/libRlapack.so
 ## 
 ## locale:
@@ -333,8 +333,8 @@ sessionInfo()
 ##  [1] Rcpp_1.0.5       pillar_1.4.6     compiler_4.0.2   tools_4.0.2     
 ##  [5] digest_0.6.25    lubridate_1.7.9  evaluate_0.14    lifecycle_0.2.0 
 ##  [9] tibble_3.0.3     gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.7     
-## [13] cli_2.0.2        yaml_2.2.1       xfun_0.17        withr_2.3.0     
-## [17] stringr_1.4.0    knitr_1.30       generics_0.0.2   vctrs_0.3.4     
+## [13] cli_2.0.2        yaml_2.2.1       xfun_0.17        withr_2.2.0     
+## [17] stringr_1.4.0    knitr_1.29       generics_0.0.2   vctrs_0.3.4     
 ## [21] hms_0.5.3        rprojroot_1.3-2  grid_4.0.2       tidyselect_1.1.0
 ## [25] glue_1.4.2       here_0.1         R6_2.4.1         fansi_0.4.1     
 ## [29] rmarkdown_2.3    farver_2.0.3     purrr_0.3.4      magrittr_1.5    
