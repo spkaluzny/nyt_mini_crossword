@@ -1,15 +1,13 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: "17 October, 2020"
 output:
   html_document:
     keep_md: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 ## The Puzzle
 
@@ -32,7 +30,8 @@ all of the R code is shown.
 We explicitly install the required R packages from CRAN if they
 are not already available.
 
-```{r load_packages}
+
+```r
 if(!requireNamespace("dplyr", quietly=TRUE)) {
   install.packages("dplyr")
 }
@@ -65,7 +64,8 @@ library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
 The `here` package allows us to find files (in this case the raw data file)
 anywhere within the project tree.
 
-```{r read_data}
+
+```r
 d <- read.csv(here::here("data", "nyt.csv"), stringsAsFactors=FALSE)
 ```
 
@@ -73,7 +73,8 @@ The `Date` and `TimeOfDay` are combined and converted to a `POSIX` variable `Dat
 The `WeekDay` is then computed from `DateTime`.
 The puzzle time (`Time`) was recorded as minutes:seconds,
 we convert that to a numeric `Seconds` variable.
-```{r date_time}
+
+```r
 d$Date <- as.Date(d$Date)
 d$DateTime <- as.POSIXct(with(d,
   paste(Date, ifelse(is.na(TimeOfDay), "00:00", TimeOfDay))))
@@ -84,7 +85,8 @@ d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
 ```
 
 Compute the time interval, in days, between puzzle playing by `Player`.
-```{r waiting_time}
+
+```r
 d <- d %>%
   group_by(Player) %>%
   arrange(Date) %>%
@@ -100,7 +102,8 @@ data entry errors have occurred.
 
 First, set some values that are expected in the data:
 
-```{r data_verification_0}
+
+```r
 # Current list of players:
 players <- c("SPK", "JAK", "JIK", "BBK", "SKK", "AKK")
 # Earliest date:
@@ -110,41 +113,83 @@ time_bound <- 600
 ```
 
 Check that Player is one of 5 possible values:
-```{r data_verification_1}
+
+```r
 d %>% assert(in_set(players), Player) %>% success_logical()
 ```
 
+```
+## [1] TRUE
+```
+
 There should be no missing values in the data:
-```{r data_verification_2}
+
+```r
 d %>% assert(not_na, DateTime, WeekDay, Seconds) %>% success_logical()
 ```
 
+```
+## [1] TRUE
+```
+
 Only one observation per player per date:
-```{r data_verification_3}
+
+```r
 d %>% group_by(Date) %>% count(Player) %>% verify(n == 1) %>% success_logical()
 ```
 
+```
+## [1] TRUE
+```
+
 Check for proper time values:
-```{r data_verification_4}
+
+```r
 d %>% assertr::verify(Seconds > 0 & Seconds < time_bound) %>% success_logical()
 ```
 
+```
+## [1] TRUE
+```
+
 Check range of dates
-```{r data_verification_5}
+
+```r
 first_date <- as.Date("2017-09-25")
 today <- Sys.Date()
 d %>% 
   assertr::verify(Date >= first_date & Date <= today) %>% success_logical()
 ```
 
+```
+## [1] TRUE
+```
+
 ## Summary Statistics
 
-Current data set has `r nrow(d)` observations.
+Current data set has 973 observations.
 
-```{r summary}
+
+```r
 d %>% group_by(Player) %>%
   summarise(Mean = mean(Seconds), Median = median(Seconds), Min = min(Seconds), Max = max(Seconds), N=n()) %>%
   arrange(Median)
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
+## # A tibble: 6 x 6
+##   Player  Mean Median   Min   Max     N
+##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
+## 1 SKK     51       47    21    89     4
+## 2 AKK     55       55    55    55     1
+## 3 JIK     82.6     62    13   264   187
+## 4 SPK    106.      87    18   455   414
+## 5 JAK    104.      89    27   454   313
+## 6 BBK    117.     102    42   350    54
 ```
 
 ## Subset the Data
@@ -153,59 +198,76 @@ Subset the data by only working with observations from
 `SPK`, `JAK` and `JIK`.
 Other players do not have enough observations to analyze.
 
-```{r subset}
+
+```r
 d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have `r nrow(d)` observations.
+Now have 914 observations.
 
 ## Plots
 
 An Initial plot of the data.
 
-```{r plot01}
+
+```r
 d %>%
   ggplot(aes(x=WeekDay, y=Seconds)) +
     geom_jitter(position = position_jitter(width=.3)) +
     ggtitle("Time vs Day of the Week")
 ```
 
+![](nyt_mini_crossword_files/figure-html/plot01-1.png)<!-- -->
+
 Same plot with player identified.
 
-```{r plot02}
+
+```r
 d %>%
   ggplot(aes(x=WeekDay, y=Seconds, color=Player)) +
     geom_jitter(position = position_jitter(width=.3)) +
     ggtitle("Time vs Day of the Week")
 ```
 
+![](nyt_mini_crossword_files/figure-html/plot02-1.png)<!-- -->
+
 The distribution of the times, summarised in a boxplot:
 
-```{r plot03, echo=FALSE}
-d %>%
-  ggplot(aes(x=WeekDay, y=Seconds, group=WeekDay)) +
-    geom_boxplot() +
-    ggtitle("Time vs Day of the Week")
-```
+![](nyt_mini_crossword_files/figure-html/plot03-1.png)<!-- -->
 
 ## Days Between Puzzles
 
-```{r plot04}
+
+```r
 d %>%
   ggplot(aes(x=Date, y=WaitingTime, color=Player)) +
     geom_point()
 ```
 
-```{r plot05}
+```
+## Warning: Removed 3 rows containing missing values (geom_point).
+```
+
+![](nyt_mini_crossword_files/figure-html/plot04-1.png)<!-- -->
+
+
+```r
 d %>%
   ggplot(aes(x=Date, y=WaitingTime)) +
     geom_point() +
     facet_grid(Player ~ ., scales="free")
 ```
 
+```
+## Warning: Removed 3 rows containing missing values (geom_point).
+```
+
+![](nyt_mini_crossword_files/figure-html/plot05-1.png)<!-- -->
+
 ## Player vs Player
-```{r spread01}
+
+```r
 # spkjak -----
 spkjak <- function(x) {
   m <- match(c("SPK","JAK"), x, nomatch=-1)
@@ -220,11 +282,15 @@ d2 <- group_by(d, Date) %>%
   ungroup() %>%
   filter(SPKJAK == "SPKJAK")
 ```
-```{r spk_vs_jak}
+
+```r
 d2 %>% filter(Player %in% c("SPK", "JAK")) %>%
   ggplot(aes(x=Date, y=Seconds, color=Player)) + geom_point()
 ```
-```{r spread02, eval=FALSE}
+
+![](nyt_mini_crossword_files/figure-html/spk_vs_jak-1.png)<!-- -->
+
+```r
 d3 <- d2 %>% select(Date, Player, Seconds) %>%
   group_by(Date) %>%
   spread(key=Player, value=Seconds) %>%
@@ -235,6 +301,44 @@ d3 <- d2 %>% select(Date, Player, Seconds) %>%
 Knowing the versions of R and the packages used in an analysis is
 an important part of reproducibility.
 The `sessionInfo` function will show this.
-```{r session_info}
+
+```r
 sessionInfo()
+```
+
+```
+## R version 4.0.2 (2020-06-22)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 18.04.5 LTS
+## 
+## Matrix products: default
+## BLAS:   /usr/lib/x86_64-linux-gnu/libf77blas.so.3.10.3
+## LAPACK: /home/R/R-4.0.2/lib/R/lib/libRlapack.so
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] ggplot2_3.3.2 dplyr_1.0.2   tidyr_1.1.2   assertr_2.7  
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_1.0.5       pillar_1.4.6     compiler_4.0.2   tools_4.0.2     
+##  [5] digest_0.6.25    lubridate_1.7.9  evaluate_0.14    lifecycle_0.2.0 
+##  [9] tibble_3.0.3     gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.7     
+## [13] cli_2.0.2        yaml_2.2.1       xfun_0.17        withr_2.3.0     
+## [17] stringr_1.4.0    knitr_1.30       generics_0.0.2   vctrs_0.3.4     
+## [21] hms_0.5.3        rprojroot_1.3-2  grid_4.0.2       tidyselect_1.1.0
+## [25] glue_1.4.2       here_0.1         R6_2.4.1         fansi_0.4.1     
+## [29] rmarkdown_2.3    farver_2.0.3     purrr_0.3.4      magrittr_1.5    
+## [33] scales_1.1.1     backports_1.1.10 ellipsis_0.3.1   htmltools_0.5.0 
+## [37] assertthat_0.2.1 colorspace_1.4-1 labeling_0.3     utf8_1.1.4      
+## [41] stringi_1.5.3    munsell_0.5.0    crayon_1.3.4
 ```
