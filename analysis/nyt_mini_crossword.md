@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "04 January, 2021"
+date: "26 July, 2021"
 output:
   html_document:
     keep_md: true
@@ -167,7 +167,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1003 observations.
+Current data set has 1059 observations.
 
 
 ```r
@@ -177,19 +177,15 @@ d %>% group_by(Player) %>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 6 x 6
 ##   Player  Mean Median   Min   Max     N
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
 ## 1 SKK     51       47    21    89     4
 ## 2 AKK     55       55    55    55     1
-## 3 JIK     82.5     62    13   264   188
-## 4 JAK    103.      87    27   454   339
-## 5 SPK    106.      87    18   455   417
-## 6 BBK    117.     102    42   350    54
+## 3 JIK     81.5     62    13   264   199
+## 4 SPK    105.      86    18   455   438
+## 5 JAK    103.      87    27   454   362
+## 6 BBK    117.     102    42   350    55
 ```
 
 ## Subset the Data
@@ -204,7 +200,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 944 observations.
+Now have 999 observations.
 
 ## Plots
 
@@ -307,13 +303,13 @@ sessionInfo()
 ```
 
 ```
-## R version 4.0.3 (2020-10-10)
+## R version 4.1.0 (2021-05-18)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 20.04.1 LTS
+## Running under: Ubuntu 20.04.2 LTS
 ## 
 ## Matrix products: default
-## BLAS:   /home/R/R-4.0.3/lib/R/lib/libRblas.so
-## LAPACK: /home/R/R-4.0.3/lib/R/lib/libRlapack.so
+## BLAS:   /home/R/R-4.1.0/lib/R/lib/libRblas.so
+## LAPACK: /home/R/R-4.1.0/lib/R/lib/libRlapack.so
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -327,18 +323,18 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ggplot2_3.3.2 dplyr_1.0.2   tidyr_1.1.2   assertr_2.7  
+## [1] ggplot2_3.3.5 dplyr_1.0.7   tidyr_1.1.3   assertr_2.8  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.5        pillar_1.4.7      compiler_4.0.3    tools_4.0.3      
-##  [5] digest_0.6.27     lubridate_1.7.9.2 evaluate_0.14     lifecycle_0.2.0  
-##  [9] tibble_3.0.4      gtable_0.3.0      pkgconfig_2.0.3   rlang_0.4.9      
-## [13] cli_2.2.0         yaml_2.2.1        xfun_0.19         withr_2.3.0      
-## [17] stringr_1.4.0     knitr_1.30        generics_0.1.0    vctrs_0.3.6      
-## [21] hms_0.5.3         rprojroot_2.0.2   grid_4.0.3        tidyselect_1.1.0 
-## [25] glue_1.4.2        here_1.0.1        R6_2.5.0          fansi_0.4.1      
-## [29] rmarkdown_2.6     farver_2.0.3      purrr_0.3.4       magrittr_2.0.1   
-## [33] scales_1.1.1      ellipsis_0.3.1    htmltools_0.5.0   assertthat_0.2.1 
-## [37] colorspace_2.0-0  labeling_0.4.2    utf8_1.1.4        stringi_1.5.3    
-## [41] munsell_0.5.0     crayon_1.3.4
+##  [1] Rcpp_1.0.7        highr_0.9         pillar_1.6.1      compiler_4.1.0   
+##  [5] tools_4.1.0       digest_0.6.27     lubridate_1.7.10  evaluate_0.14    
+##  [9] lifecycle_1.0.0   tibble_3.1.2      gtable_0.3.0      pkgconfig_2.0.3  
+## [13] rlang_0.4.11      cli_3.0.1         DBI_1.1.1         yaml_2.2.1       
+## [17] xfun_0.24         withr_2.4.2       stringr_1.4.0     knitr_1.33       
+## [21] generics_0.1.0    vctrs_0.3.8       hms_1.1.0         rprojroot_2.0.2  
+## [25] grid_4.1.0        tidyselect_1.1.1  glue_1.4.2        here_1.0.1       
+## [29] R6_2.5.0          fansi_0.5.0       rmarkdown_2.9     farver_2.1.0     
+## [33] purrr_0.3.4       magrittr_2.0.1    scales_1.1.1      ellipsis_0.3.2   
+## [37] htmltools_0.5.1.1 assertthat_0.2.1  colorspace_2.0-2  labeling_0.4.2   
+## [41] utf8_1.2.1        stringi_1.7.3     munsell_0.5.0     crayon_1.4.1
 ```
