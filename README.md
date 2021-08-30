@@ -1,10 +1,14 @@
 # Analysis of times for the New York Times Mini Crossword.
 
-Observations are:
-person,date,puzzle_time,time_of_day
+A number of people are doing the New York Times Mini Crossword.
+Everytime they do the puzzle they text me their time and the
+time of day that they did the puzzle.
 
-Read with:
-```r
-d <- read.csv(here::here("data", "nyt.csv"), stringsAsFactors=FALSE)
-```
-And then this do.
+I have been recording these observations in this repository along
+with code to analyze the results.
+
+Questions:
+ - do the puzzles get harder through the week?
+ - do individuals do better on the puzzle at particular times of the day?
+ - how do we compare in puzzle times amongst the players?
+
