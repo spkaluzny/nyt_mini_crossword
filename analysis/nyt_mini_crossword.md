@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "30 August, 2021"
+date: "05 September, 2021"
 output:
   html_document:
     keep_md: true
@@ -82,6 +82,11 @@ d$WeekDay <- lubridate::wday(d$DateTime)
 d$TimeOfDayOrig <- d$TimeOfDay
 d$TimeOfDay <- hms::parse_hm(d$TimeOfDay)
 d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
+```
+
+```
+## Warning in .parse_hms(..., order = "MS", quiet = quiet): Some strings failed to
+## parse, or all strings are NAs
 ```
 
 Compute the time interval, in days, between puzzle playing by `Player`.
@@ -167,7 +172,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1097 observations.
+Current data set has 1113 observations.
 
 
 ```r
@@ -180,12 +185,12 @@ d %>% group_by(Player) %>%
 ## # A tibble: 6 × 6
 ##   Player  Mean Median   Min   Max     N
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
-## 1 SKK     51     47      21    89     4
-## 2 AKK     55     55      55    55     1
-## 3 JIK     80.8   61.5    13   264   202
-## 4 SPK    105.    86      18   455   449
-## 5 JAK    103.    87      27   454   386
-## 6 BBK    117.   102      42   350    55
+## 1 SKK     51       47    21    89     4
+## 2 AKK     55       55    55    55     1
+## 3 JIK     80.6     62    13   264   207
+## 4 JAK    104.      87    27   454   392
+## 5 BBK    117.     102    42   350    55
+## 6 SPK     NA       NA    NA    NA   454
 ```
 
 ## Subset the Data
@@ -200,7 +205,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1037 observations.
+Now have 1053 observations.
 
 ## Plots
 
@@ -212,6 +217,10 @@ d %>%
   ggplot(aes(x=WeekDay, y=Seconds)) +
     geom_jitter(position = position_jitter(width=.3)) +
     ggtitle("Time vs Day of the Week")
+```
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
 ![](nyt_mini_crossword_files/figure-html/plot01-1.png)<!-- -->
@@ -226,9 +235,18 @@ d %>%
     ggtitle("Time vs Day of the Week")
 ```
 
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
 ![](nyt_mini_crossword_files/figure-html/plot02-1.png)<!-- -->
 
 The distribution of the times, summarised in a boxplot:
+
+
+```
+## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
+```
 
 ![](nyt_mini_crossword_files/figure-html/plot03-1.png)<!-- -->
 
@@ -284,6 +302,10 @@ d2 %>% filter(Player %in% c("SPK", "JAK")) %>%
   ggplot(aes(x=Date, y=Seconds, color=Player)) + geom_point()
 ```
 
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
 ![](nyt_mini_crossword_files/figure-html/spk_vs_jak-1.png)<!-- -->
 
 ```r
@@ -326,7 +348,7 @@ sessionInfo()
 ## [1] ggplot2_3.3.5 dplyr_1.0.7   tidyr_1.1.3   assertr_2.8  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.7       highr_0.9        pillar_1.6.2     bslib_0.2.5.1   
+##  [1] Rcpp_1.0.7       highr_0.9        pillar_1.6.2     bslib_0.3.0     
 ##  [5] compiler_4.1.1   jquerylib_0.1.4  tools_4.1.1      digest_0.6.27   
 ##  [9] lubridate_1.7.10 jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.0 
 ## [13] tibble_3.1.4     gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.11    
