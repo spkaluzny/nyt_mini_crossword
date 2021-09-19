@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "12 September, 2021"
+date: "19 September, 2021"
 output:
   html_document:
     keep_md: true
@@ -172,7 +172,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1128 observations.
+Current data set has 1140 observations.
 
 
 ```r
@@ -187,10 +187,10 @@ d %>% group_by(Player) %>%
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
 ## 1 SKK     51       47    21    89     4
 ## 2 AKK     55       55    55    55     1
-## 3 JIK     79.9     62    13   264   211
-## 4 JAK    103.      87    27   454   398
-## 5 BBK    117.     102    42   350    55
-## 6 SPK     NA       NA    NA    NA   459
+## 3 JIK     79.6     62    13   264   214
+## 4 JAK    103.      87    27   454   403
+## 5 BBK    117.     102    42   350    56
+## 6 SPK     NA       NA    NA    NA   462
 ```
 
 ## Subset the Data
@@ -205,7 +205,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1068 observations.
+Now have 1079 observations.
 
 ## Plots
 
@@ -352,11 +352,11 @@ sessionInfo()
 ##  [5] compiler_4.1.1   jquerylib_0.1.4  tools_4.1.1      digest_0.6.27   
 ##  [9] lubridate_1.7.10 jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.0 
 ## [13] tibble_3.1.4     gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.11    
-## [17] cli_3.0.1        DBI_1.1.1        yaml_2.2.1       xfun_0.25       
+## [17] cli_3.0.1        DBI_1.1.1        yaml_2.2.1       xfun_0.26       
 ## [21] fastmap_1.1.0    withr_2.4.2      stringr_1.4.0    knitr_1.34      
 ## [25] hms_1.1.0        generics_0.1.0   vctrs_0.3.8      sass_0.4.0      
 ## [29] rprojroot_2.0.2  grid_4.1.1       tidyselect_1.1.1 here_1.0.1      
-## [33] glue_1.4.2       R6_2.5.1         fansi_0.5.0      rmarkdown_2.10  
+## [33] glue_1.4.2       R6_2.5.1         fansi_0.5.0      rmarkdown_2.11  
 ## [37] farver_2.1.0     purrr_0.3.4      magrittr_2.0.1   scales_1.1.1    
 ## [41] ellipsis_0.3.2   htmltools_0.5.2  assertthat_0.2.1 colorspace_2.0-2
 ## [45] labeling_0.4.2   utf8_1.2.2       stringi_1.7.4    munsell_0.5.0   
