@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "19 September, 2021"
+date: "23 September, 2021"
 output:
   html_document:
     keep_md: true
@@ -172,7 +172,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1140 observations.
+Current data set has 1148 observations.
 
 
 ```r
@@ -187,10 +187,10 @@ d %>% group_by(Player) %>%
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
 ## 1 SKK     51       47    21    89     4
 ## 2 AKK     55       55    55    55     1
-## 3 JIK     79.6     62    13   264   214
-## 4 JAK    103.      87    27   454   403
+## 3 JIK     79.8     62    13   264   217
+## 4 JAK    103.      86    27   454   406
 ## 5 BBK    117.     102    42   350    56
-## 6 SPK     NA       NA    NA    NA   462
+## 6 SPK     NA       NA    NA    NA   464
 ```
 
 ## Subset the Data
@@ -205,7 +205,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1079 observations.
+Now have 1087 observations.
 
 ## Plots
 
