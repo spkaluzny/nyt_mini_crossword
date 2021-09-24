@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "23 September, 2021"
+date: "24 September, 2021"
 output:
   html_document:
     keep_md: true
@@ -172,7 +172,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1148 observations.
+Current data set has 1150 observations.
 
 
 ```r
@@ -188,9 +188,9 @@ d %>% group_by(Player) %>%
 ## 1 SKK     51       47    21    89     4
 ## 2 AKK     55       55    55    55     1
 ## 3 JIK     79.8     62    13   264   217
-## 4 JAK    103.      86    27   454   406
+## 4 JAK    103.      86    27   454   407
 ## 5 BBK    117.     102    42   350    56
-## 6 SPK     NA       NA    NA    NA   464
+## 6 SPK     NA       NA    NA    NA   465
 ```
 
 ## Subset the Data
@@ -205,7 +205,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1087 observations.
+Now have 1089 observations.
 
 ## Plots
 
@@ -349,7 +349,7 @@ sessionInfo()
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.7       highr_0.9        pillar_1.6.2     bslib_0.3.0     
-##  [5] compiler_4.1.1   jquerylib_0.1.4  tools_4.1.1      digest_0.6.27   
+##  [5] compiler_4.1.1   jquerylib_0.1.4  tools_4.1.1      digest_0.6.28   
 ##  [9] lubridate_1.7.10 jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.0 
 ## [13] tibble_3.1.4     gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.11    
 ## [17] cli_3.0.1        DBI_1.1.1        yaml_2.2.1       xfun_0.26       
