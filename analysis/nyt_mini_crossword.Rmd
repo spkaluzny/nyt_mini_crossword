@@ -205,6 +205,11 @@ d %>%
 ```
 
 ## Player vs Player
+The function `spkjak` returns "SPKJAK" if a date contains an entry
+for both "SPK" and "JAK".
+It could also contain an entry for "JIK".
+The `d2` object selects the observations with "SPKJAK" set and
+then only keeps those where `Player` is "SPK" or "JAK".
 ```{r spread01}
 # spkjak -----
 spkjak <- function(x) {
@@ -218,9 +223,9 @@ spkjak <- function(x) {
 d2 <- group_by(d, Date) %>%
   mutate(SPKJAK = spkjak(Player)) %>%
   ungroup() %>%
-  filter(SPKJAK == "SPKJAK")
+  filter(SPKJAK == "SPKJAK", Player %in% c("SPK", "JAK"))
 ```
-```{r spk_vs_jak}
+```{r spk_and_jak}
 d2 %>% filter(Player %in% c("SPK", "JAK")) %>%
   ggplot(aes(x=Date, y=Seconds, color=Player)) + geom_point()
 ```
