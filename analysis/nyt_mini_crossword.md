@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "30 September, 2021"
+date: "17 October, 2021"
 output:
   html_document:
     keep_md: true
@@ -82,11 +82,6 @@ d$WeekDay <- lubridate::wday(d$DateTime)
 d$TimeOfDayOrig <- d$TimeOfDay
 d$TimeOfDay <- hms::parse_hm(d$TimeOfDay)
 d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
-```
-
-```
-## Warning in .parse_hms(..., order = "MS", quiet = quiet): Some strings failed to
-## parse, or all strings are NAs
 ```
 
 Compute the time interval, in days, between puzzle playing by `Player`.
@@ -172,7 +167,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1161 observations.
+Current data set has 1187 observations.
 
 
 ```r
@@ -187,10 +182,10 @@ d %>% group_by(Player) %>%
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
 ## 1 SKK     51       47    21    89     4
 ## 2 AKK     55       55    55    55     1
-## 3 JIK     79.6     62    13   264   219
-## 4 JAK    103.      86    27   454   411
-## 5 BBK    117.     102    42   350    56
-## 6 SPK     NA       NA    NA    NA   470
+## 3 JIK     78.9     61    13   264   225
+## 4 SPK    102.      85    18   455   477
+## 5 JAK    103.      86    27   454   424
+## 6 BBK    117.     102    42   350    56
 ```
 
 ## Subset the Data
@@ -205,7 +200,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1100 observations.
+Now have 1126 observations.
 
 ## Plots
 
@@ -217,10 +212,6 @@ d %>%
   ggplot(aes(x=WeekDay, y=Seconds)) +
     geom_jitter(position = position_jitter(width=.3)) +
     ggtitle("Time vs Day of the Week")
-```
-
-```
-## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
 ![](nyt_mini_crossword_files/figure-html/plot01-1.png)<!-- -->
@@ -235,18 +226,9 @@ d %>%
     ggtitle("Time vs Day of the Week")
 ```
 
-```
-## Warning: Removed 1 rows containing missing values (geom_point).
-```
-
 ![](nyt_mini_crossword_files/figure-html/plot02-1.png)<!-- -->
 
 The distribution of the times, summarised in a boxplot:
-
-
-```
-## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
-```
 
 ![](nyt_mini_crossword_files/figure-html/plot03-1.png)<!-- -->
 
@@ -280,6 +262,11 @@ d %>%
 ![](nyt_mini_crossword_files/figure-html/plot05-1.png)<!-- -->
 
 ## Player vs Player
+The function `spkjak` returns "SPKJAK" if a date contains an entry
+for both "SPK" and "JAK".
+It could also contain an entry for "JIK".
+The `d2` object selects the observations with "SPKJAK" set and
+then only keeps those where `Player` is "SPK" or "JAK".
 
 ```r
 # spkjak -----
@@ -294,7 +281,7 @@ spkjak <- function(x) {
 d2 <- group_by(d, Date) %>%
   mutate(SPKJAK = spkjak(Player)) %>%
   ungroup() %>%
-  filter(SPKJAK == "SPKJAK")
+  filter(SPKJAK == "SPKJAK", Player %in% c("SPK", "JAK"))
 ```
 
 ```r
@@ -302,11 +289,7 @@ d2 %>% filter(Player %in% c("SPK", "JAK")) %>%
   ggplot(aes(x=Date, y=Seconds, color=Player)) + geom_point()
 ```
 
-```
-## Warning: Removed 1 rows containing missing values (geom_point).
-```
-
-![](nyt_mini_crossword_files/figure-html/spk_vs_jak-1.png)<!-- -->
+![](nyt_mini_crossword_files/figure-html/spk_and_jak-1.png)<!-- -->
 
 ```r
 d3 <- d2 %>% select(Date, Player, Seconds) %>%
@@ -348,17 +331,16 @@ sessionInfo()
 ## [1] ggplot2_3.3.5 dplyr_1.0.7   tidyr_1.1.4   assertr_2.8  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.7       highr_0.9        pillar_1.6.3     bslib_0.3.0     
-##  [5] compiler_4.1.1   jquerylib_0.1.4  tools_4.1.1      digest_0.6.28   
-##  [9] lubridate_1.7.10 jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.1 
-## [13] tibble_3.1.5     gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.11    
-## [17] cli_3.0.1        DBI_1.1.1        yaml_2.2.1       xfun_0.26       
-## [21] fastmap_1.1.0    withr_2.4.2      stringr_1.4.0    knitr_1.36      
-## [25] hms_1.1.1        generics_0.1.0   vctrs_0.3.8      sass_0.4.0      
-## [29] rprojroot_2.0.2  grid_4.1.1       tidyselect_1.1.1 here_1.0.1      
-## [33] glue_1.4.2       R6_2.5.1         fansi_0.5.0      rmarkdown_2.11  
-## [37] farver_2.1.0     purrr_0.3.4      magrittr_2.0.1   scales_1.1.1    
-## [41] ellipsis_0.3.2   htmltools_0.5.2  assertthat_0.2.1 colorspace_2.0-2
-## [45] labeling_0.4.2   utf8_1.2.2       stringi_1.7.4    munsell_0.5.0   
-## [49] crayon_1.4.1
+##  [1] highr_0.9        pillar_1.6.3     bslib_0.3.1      compiler_4.1.1  
+##  [5] jquerylib_0.1.4  tools_4.1.1      digest_0.6.28    lubridate_1.8.0 
+##  [9] jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.1  tibble_3.1.5    
+## [13] gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.11     cli_3.0.1       
+## [17] DBI_1.1.1        yaml_2.2.1       xfun_0.26        fastmap_1.1.0   
+## [21] withr_2.4.2      stringr_1.4.0    knitr_1.36       hms_1.1.1       
+## [25] generics_0.1.0   vctrs_0.3.8      sass_0.4.0       rprojroot_2.0.2 
+## [29] grid_4.1.1       tidyselect_1.1.1 here_1.0.1       glue_1.4.2      
+## [33] R6_2.5.1         fansi_0.5.0      rmarkdown_2.11   farver_2.1.0    
+## [37] purrr_0.3.4      magrittr_2.0.1   scales_1.1.1     ellipsis_0.3.2  
+## [41] htmltools_0.5.2  assertthat_0.2.1 colorspace_2.0-2 labeling_0.4.2  
+## [45] utf8_1.2.2       stringi_1.7.5    munsell_0.5.0    crayon_1.4.1
 ```
