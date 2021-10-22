@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "17 October, 2021"
+date: "21 October, 2021"
 output:
   html_document:
     keep_md: true
@@ -167,7 +167,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1187 observations.
+Current data set has 1197 observations.
 
 
 ```r
@@ -182,9 +182,9 @@ d %>% group_by(Player) %>%
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
 ## 1 SKK     51       47    21    89     4
 ## 2 AKK     55       55    55    55     1
-## 3 JIK     78.9     61    13   264   225
-## 4 SPK    102.      85    18   455   477
-## 5 JAK    103.      86    27   454   424
+## 3 JIK     78.4     61    13   264   229
+## 4 SPK    102.      85    18   455   479
+## 5 JAK    103.      86    27   454   428
 ## 6 BBK    117.     102    42   350    56
 ```
 
@@ -200,7 +200,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1126 observations.
+Now have 1136 observations.
 
 ## Plots
 
@@ -331,11 +331,11 @@ sessionInfo()
 ## [1] ggplot2_3.3.5 dplyr_1.0.7   tidyr_1.1.4   assertr_2.8  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] highr_0.9        pillar_1.6.3     bslib_0.3.1      compiler_4.1.1  
+##  [1] highr_0.9        pillar_1.6.4     bslib_0.3.1      compiler_4.1.1  
 ##  [5] jquerylib_0.1.4  tools_4.1.1      digest_0.6.28    lubridate_1.8.0 
 ##  [9] jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.1  tibble_3.1.5    
-## [13] gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.11     cli_3.0.1       
-## [17] DBI_1.1.1        yaml_2.2.1       xfun_0.26        fastmap_1.1.0   
+## [13] gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.12     cli_3.0.1       
+## [17] DBI_1.1.1        yaml_2.2.1       xfun_0.27        fastmap_1.1.0   
 ## [21] withr_2.4.2      stringr_1.4.0    knitr_1.36       hms_1.1.1       
 ## [25] generics_0.1.0   vctrs_0.3.8      sass_0.4.0       rprojroot_2.0.2 
 ## [29] grid_4.1.1       tidyselect_1.1.1 here_1.0.1       glue_1.4.2      
