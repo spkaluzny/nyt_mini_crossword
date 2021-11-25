@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "07 November, 2021"
+date: "25 November, 2021"
 output:
   html_document:
     keep_md: true
@@ -167,7 +167,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1224 observations.
+Current data set has 1252 observations.
 
 
 ```r
@@ -180,12 +180,12 @@ d %>% group_by(Player) %>%
 ## # A tibble: 6 × 6
 ##   Player  Mean Median   Min   Max     N
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
-## 1 SKK     51       47    21    89     4
-## 2 AKK     55       55    55    55     1
-## 3 JIK     77.4     60    13   264   238
-## 4 SPK    102.      84    18   455   487
-## 5 JAK    102.      86    27   454   437
-## 6 BBK    117.     102    42   350    57
+## 1 SKK     51     47      21    89     4
+## 2 AKK     55     55      55    55     1
+## 3 JIK     76.9   59.5    13   264   242
+## 4 SPK    103.    84      18   930   498
+## 5 JAK    102.    86      27   454   446
+## 6 BBK    116.   102      42   350    61
 ```
 
 ## Subset the Data
@@ -200,7 +200,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1162 observations.
+Now have 1186 observations.
 
 ## Plots
 
@@ -333,7 +333,7 @@ sessionInfo()
 ## loaded via a namespace (and not attached):
 ##  [1] highr_0.9        pillar_1.6.4     bslib_0.3.1      compiler_4.1.1  
 ##  [5] jquerylib_0.1.4  tools_4.1.1      digest_0.6.28    lubridate_1.8.0 
-##  [9] jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.1  tibble_3.1.5    
+##  [9] jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.1  tibble_3.1.6    
 ## [13] gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.12     cli_3.1.0       
 ## [17] DBI_1.1.1        yaml_2.2.1       xfun_0.28        fastmap_1.1.0   
 ## [21] withr_2.4.2      stringr_1.4.0    knitr_1.36       hms_1.1.1       
