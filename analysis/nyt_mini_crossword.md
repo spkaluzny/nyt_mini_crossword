@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "25 November, 2021"
+date: "18 December, 2021"
 output:
   html_document:
     keep_md: true
@@ -167,7 +167,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1252 observations.
+Current data set has 1298 observations.
 
 
 ```r
@@ -182,10 +182,10 @@ d %>% group_by(Player) %>%
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
 ## 1 SKK     51     47      21    89     4
 ## 2 AKK     55     55      55    55     1
-## 3 JIK     76.9   59.5    13   264   242
-## 4 SPK    103.    84      18   930   498
-## 5 JAK    102.    86      27   454   446
-## 6 BBK    116.   102      42   350    61
+## 3 JIK     76.5   59.5    13   264   252
+## 4 SPK    101.    84      18   455   514
+## 5 JAK    103.    86      27   454   460
+## 6 BBK    115.   102      42   350    67
 ```
 
 ## Subset the Data
@@ -200,7 +200,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1186 observations.
+Now have 1226 observations.
 
 ## Plots
 
@@ -308,13 +308,13 @@ sessionInfo()
 ```
 
 ```
-## R version 4.1.1 (2021-08-10)
+## R version 4.1.2 (2021-11-01)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.3 LTS
 ## 
 ## Matrix products: default
-## BLAS:   /home/R/R-4.1.1/lib/R/lib/libRblas.so
-## LAPACK: /home/R/R-4.1.1/lib/R/lib/libRlapack.so
+## BLAS:   /home/R/R-4.1.2/lib/R/lib/libRblas.so
+## LAPACK: /home/R/R-4.1.2/lib/R/lib/libRlapack.so
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -331,16 +331,16 @@ sessionInfo()
 ## [1] ggplot2_3.3.5 dplyr_1.0.7   tidyr_1.1.4   assertr_2.8  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] highr_0.9        pillar_1.6.4     bslib_0.3.1      compiler_4.1.1  
-##  [5] jquerylib_0.1.4  tools_4.1.1      digest_0.6.28    lubridate_1.8.0 
+##  [1] highr_0.9        pillar_1.6.4     bslib_0.3.1      compiler_4.1.2  
+##  [5] jquerylib_0.1.4  tools_4.1.2      digest_0.6.29    lubridate_1.8.0 
 ##  [9] jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.1  tibble_3.1.6    
 ## [13] gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.12     cli_3.1.0       
-## [17] DBI_1.1.1        yaml_2.2.1       xfun_0.28        fastmap_1.1.0   
-## [21] withr_2.4.2      stringr_1.4.0    knitr_1.36       hms_1.1.1       
+## [17] DBI_1.1.1        yaml_2.2.1       xfun_0.29        fastmap_1.1.0   
+## [21] withr_2.4.3      stringr_1.4.0    knitr_1.37       hms_1.1.1       
 ## [25] generics_0.1.1   vctrs_0.3.8      sass_0.4.0       rprojroot_2.0.2 
-## [29] grid_4.1.1       tidyselect_1.1.1 here_1.0.1       glue_1.5.0      
+## [29] grid_4.1.2       tidyselect_1.1.1 here_1.0.1       glue_1.6.0      
 ## [33] R6_2.5.1         fansi_0.5.0      rmarkdown_2.11   farver_2.1.0    
 ## [37] purrr_0.3.4      magrittr_2.0.1   scales_1.1.1     ellipsis_0.3.2  
 ## [41] htmltools_0.5.2  assertthat_0.2.1 colorspace_2.0-2 labeling_0.4.2  
-## [45] utf8_1.2.2       stringi_1.7.5    munsell_0.5.0    crayon_1.4.2
+## [45] utf8_1.2.2       stringi_1.7.6    munsell_0.5.0    crayon_1.4.2
 ```
