@@ -3,8 +3,9 @@ title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  html_document:
-    keep_md: true
+  html_document: 
+    keep_md: yes
+    theme: cerulean
 ---
 
 ```{r setup, include=FALSE}
@@ -102,16 +103,17 @@ First, set some values that are expected in the data:
 
 ```{r data_verification_0}
 # Current list of players:
-players <- c("SPK", "JAK", "JIK", "BBK", "SKK", "AKK")
+players <- c("SPK", "JAK", "JIK", "BBK", "SKK", "AKK", "MBH")
 # Earliest date:
 first_date <- as.Date("2017-09-25")
 # Upper bound on time (10 minutes = 600 seconds):
-time_bound <- 600
+time_bound <- 700
 ```
 
 Check that Player is one of 5 possible values:
 ```{r data_verification_1}
-d %>% assert(in_set(players), Player) %>% success_logical()
+d %>% assert(in_set(players), Player, success_fun=success_logical,
+  error_fun=error_logical)
 ```
 
 There should be no missing values in the data:
@@ -126,7 +128,8 @@ d %>% group_by(Date) %>% count(Player) %>% verify(n == 1) %>% success_logical()
 
 Check for proper time values:
 ```{r data_verification_4}
-d %>% assertr::verify(Seconds > 0 & Seconds < time_bound) %>% success_logical()
+d %>% assertr::verify(Seconds > 0 & Seconds < time_bound,
+  success_fun=success_logical, error_fun=error_logical)
 ```
 
 Check range of dates
@@ -134,7 +137,8 @@ Check range of dates
 first_date <- as.Date("2017-09-25")
 today <- Sys.Date()
 d %>% 
-  assertr::verify(Date >= first_date & Date <= today) %>% success_logical()
+  assertr::verify(Date >= first_date & Date <= today, success_fun=success_logical,
+    error_fun=error_logical)
 ```
 
 ## Summary Statistics

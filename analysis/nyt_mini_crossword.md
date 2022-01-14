@@ -1,10 +1,11 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "18 December, 2021"
+date: "13 January, 2022"
 output:
-  html_document:
-    keep_md: true
+  html_document: 
+    keep_md: yes
+    theme: cerulean
 ---
 
 
@@ -105,17 +106,18 @@ First, set some values that are expected in the data:
 
 ```r
 # Current list of players:
-players <- c("SPK", "JAK", "JIK", "BBK", "SKK", "AKK")
+players <- c("SPK", "JAK", "JIK", "BBK", "SKK", "AKK", "MBH")
 # Earliest date:
 first_date <- as.Date("2017-09-25")
 # Upper bound on time (10 minutes = 600 seconds):
-time_bound <- 600
+time_bound <- 700
 ```
 
 Check that Player is one of 5 possible values:
 
 ```r
-d %>% assert(in_set(players), Player) %>% success_logical()
+d %>% assert(in_set(players), Player, success_fun=success_logical,
+  error_fun=error_logical)
 ```
 
 ```
@@ -145,7 +147,8 @@ d %>% group_by(Date) %>% count(Player) %>% verify(n == 1) %>% success_logical()
 Check for proper time values:
 
 ```r
-d %>% assertr::verify(Seconds > 0 & Seconds < time_bound) %>% success_logical()
+d %>% assertr::verify(Seconds > 0 & Seconds < time_bound,
+  success_fun=success_logical, error_fun=error_logical)
 ```
 
 ```
@@ -158,7 +161,8 @@ Check range of dates
 first_date <- as.Date("2017-09-25")
 today <- Sys.Date()
 d %>% 
-  assertr::verify(Date >= first_date & Date <= today) %>% success_logical()
+  assertr::verify(Date >= first_date & Date <= today, success_fun=success_logical,
+    error_fun=error_logical)
 ```
 
 ```
@@ -167,7 +171,7 @@ d %>%
 
 ## Summary Statistics
 
-Current data set has 1298 observations.
+Current data set has 1357 observations.
 
 
 ```r
@@ -177,15 +181,16 @@ d %>% group_by(Player) %>%
 ```
 
 ```
-## # A tibble: 6 × 6
+## # A tibble: 7 × 6
 ##   Player  Mean Median   Min   Max     N
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
-## 1 SKK     51     47      21    89     4
+## 1 SKK     60.1   45      21   146     7
 ## 2 AKK     55     55      55    55     1
-## 3 JIK     76.5   59.5    13   264   252
-## 4 SPK    101.    84      18   455   514
-## 5 JAK    103.    86      27   454   460
-## 6 BBK    115.   102      42   350    67
+## 3 JIK     75.0   58.5    13   264   264
+## 4 SPK    101.    83      18   455   528
+## 5 JAK    104.    86      27   635   482
+## 6 BBK    114.   102      42   350    71
+## 7 MBH    400.   378.    202   642     4
 ```
 
 ## Subset the Data
@@ -200,7 +205,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1226 observations.
+Now have 1274 observations.
 
 ## Plots
 
@@ -334,13 +339,14 @@ sessionInfo()
 ##  [1] highr_0.9        pillar_1.6.4     bslib_0.3.1      compiler_4.1.2  
 ##  [5] jquerylib_0.1.4  tools_4.1.2      digest_0.6.29    lubridate_1.8.0 
 ##  [9] jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.1  tibble_3.1.6    
-## [13] gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.12     cli_3.1.0       
-## [17] DBI_1.1.1        yaml_2.2.1       xfun_0.29        fastmap_1.1.0   
-## [21] withr_2.4.3      stringr_1.4.0    knitr_1.37       hms_1.1.1       
-## [25] generics_0.1.1   vctrs_0.3.8      sass_0.4.0       rprojroot_2.0.2 
-## [29] grid_4.1.2       tidyselect_1.1.1 here_1.0.1       glue_1.6.0      
-## [33] R6_2.5.1         fansi_0.5.0      rmarkdown_2.11   farver_2.1.0    
-## [37] purrr_0.3.4      magrittr_2.0.1   scales_1.1.1     ellipsis_0.3.2  
-## [41] htmltools_0.5.2  assertthat_0.2.1 colorspace_2.0-2 labeling_0.4.2  
-## [45] utf8_1.2.2       stringi_1.7.6    munsell_0.5.0    crayon_1.4.2
+## [13] gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.12     rstudioapi_0.13 
+## [17] cli_3.1.0        DBI_1.1.2        yaml_2.2.1       xfun_0.29       
+## [21] fastmap_1.1.0    withr_2.4.3      stringr_1.4.0    knitr_1.37      
+## [25] hms_1.1.1        generics_0.1.1   vctrs_0.3.8      sass_0.4.0      
+## [29] rprojroot_2.0.2  grid_4.1.2       tidyselect_1.1.1 here_1.0.1      
+## [33] glue_1.6.0       R6_2.5.1         fansi_1.0.0      rmarkdown_2.11  
+## [37] farver_2.1.0     purrr_0.3.4      magrittr_2.0.1   scales_1.1.1    
+## [41] ellipsis_0.3.2   htmltools_0.5.2  assertthat_0.2.1 colorspace_2.0-2
+## [45] labeling_0.4.2   utf8_1.2.2       stringi_1.7.6    munsell_0.5.0   
+## [49] crayon_1.4.2
 ```
