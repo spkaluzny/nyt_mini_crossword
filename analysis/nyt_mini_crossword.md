@@ -1,7 +1,7 @@
 ---
 title: "New York Time Mini Crossword"
 author: "Stephen Kaluzny"
-date: "13 January, 2022"
+date: "15 February, 2022"
 output:
   html_document: 
     keep_md: yes
@@ -85,6 +85,11 @@ d$TimeOfDay <- hms::parse_hm(d$TimeOfDay)
 d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
 ```
 
+```
+## Warning in .parse_hms(..., order = "MS", quiet = quiet): Some strings failed to
+## parse, or all strings are NAs
+```
+
 Compute the time interval, in days, between puzzle playing by `Player`.
 
 ```r
@@ -152,7 +157,7 @@ d %>% assertr::verify(Seconds > 0 & Seconds < time_bound,
 ```
 
 ```
-## [1] TRUE
+## [1] FALSE
 ```
 
 Check range of dates
@@ -166,12 +171,12 @@ d %>%
 ```
 
 ```
-## [1] TRUE
+## [1] FALSE
 ```
 
 ## Summary Statistics
 
-Current data set has 1357 observations.
+Current data set has 1431 observations.
 
 
 ```r
@@ -184,13 +189,13 @@ d %>% group_by(Player) %>%
 ## # A tibble: 7 × 6
 ##   Player  Mean Median   Min   Max     N
 ##   <chr>  <dbl>  <dbl> <dbl> <dbl> <int>
-## 1 SKK     60.1   45      21   146     7
-## 2 AKK     55     55      55    55     1
-## 3 JIK     75.0   58.5    13   264   264
-## 4 SPK    101.    83      18   455   528
-## 5 JAK    104.    86      27   635   482
-## 6 BBK    114.   102      42   350    71
-## 7 MBH    400.   378.    202   642     4
+## 1 SKK     60.1     45    21   146     7
+## 2 AKK     55       55    55    55     1
+## 3 SPK    101.      83    18   455   542
+## 4 JAK    108.      87    27   818   509
+## 5 BBK    114.     102    42   350    73
+## 6 MBH    378.     362   140   770    13
+## 7 JIK     NA       NA    NA    NA   286
 ```
 
 ## Subset the Data
@@ -205,7 +210,7 @@ d <- d %>%
   filter(Player %in% c("SPK", "JAK", "JIK"))
 ```
 
-Now have 1274 observations.
+Now have 1337 observations.
 
 ## Plots
 
@@ -217,6 +222,10 @@ d %>%
   ggplot(aes(x=WeekDay, y=Seconds)) +
     geom_jitter(position = position_jitter(width=.3)) +
     ggtitle("Time vs Day of the Week")
+```
+
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
 ![](nyt_mini_crossword_files/figure-html/plot01-1.png)<!-- -->
@@ -231,9 +240,18 @@ d %>%
     ggtitle("Time vs Day of the Week")
 ```
 
+```
+## Warning: Removed 1 rows containing missing values (geom_point).
+```
+
 ![](nyt_mini_crossword_files/figure-html/plot02-1.png)<!-- -->
 
 The distribution of the times, summarised in a boxplot:
+
+
+```
+## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
+```
 
 ![](nyt_mini_crossword_files/figure-html/plot03-1.png)<!-- -->
 
@@ -333,20 +351,19 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ggplot2_3.3.5 dplyr_1.0.7   tidyr_1.1.4   assertr_2.8  
+## [1] ggplot2_3.3.5 dplyr_1.0.8   tidyr_1.2.0   assertr_2.8  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] highr_0.9        pillar_1.6.4     bslib_0.3.1      compiler_4.1.2  
+##  [1] highr_0.9        pillar_1.7.0     bslib_0.3.1      compiler_4.1.2  
 ##  [5] jquerylib_0.1.4  tools_4.1.2      digest_0.6.29    lubridate_1.8.0 
-##  [9] jsonlite_1.7.2   evaluate_0.14    lifecycle_1.0.1  tibble_3.1.6    
-## [13] gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.12     rstudioapi_0.13 
-## [17] cli_3.1.0        DBI_1.1.2        yaml_2.2.1       xfun_0.29       
-## [21] fastmap_1.1.0    withr_2.4.3      stringr_1.4.0    knitr_1.37      
-## [25] hms_1.1.1        generics_0.1.1   vctrs_0.3.8      sass_0.4.0      
-## [29] rprojroot_2.0.2  grid_4.1.2       tidyselect_1.1.1 here_1.0.1      
-## [33] glue_1.6.0       R6_2.5.1         fansi_1.0.0      rmarkdown_2.11  
-## [37] farver_2.1.0     purrr_0.3.4      magrittr_2.0.1   scales_1.1.1    
-## [41] ellipsis_0.3.2   htmltools_0.5.2  assertthat_0.2.1 colorspace_2.0-2
-## [45] labeling_0.4.2   utf8_1.2.2       stringi_1.7.6    munsell_0.5.0   
-## [49] crayon_1.4.2
+##  [9] jsonlite_1.7.3   evaluate_0.14    lifecycle_1.0.1  tibble_3.1.6    
+## [13] gtable_0.3.0     pkgconfig_2.0.3  rlang_1.0.1      cli_3.2.0       
+## [17] DBI_1.1.2        yaml_2.2.2       xfun_0.29        fastmap_1.1.0   
+## [21] withr_2.4.3      stringr_1.4.0    knitr_1.37       hms_1.1.1       
+## [25] generics_0.1.2   vctrs_0.3.8      sass_0.4.0       rprojroot_2.0.2 
+## [29] grid_4.1.2       tidyselect_1.1.1 here_1.0.1       glue_1.6.1      
+## [33] R6_2.5.1         fansi_1.0.2      rmarkdown_2.11   farver_2.1.0    
+## [37] purrr_0.3.4      magrittr_2.0.2   scales_1.1.1     ellipsis_0.3.2  
+## [41] htmltools_0.5.2  assertthat_0.2.1 colorspace_2.0-2 labeling_0.4.2  
+## [45] utf8_1.2.2       stringi_1.7.6    munsell_0.5.0    crayon_1.5.0
 ```
