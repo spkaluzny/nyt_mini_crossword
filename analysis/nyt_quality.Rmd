@@ -1,0 +1,95 @@
+---
+title: "Quality Check - NYT Mini Crossword Data"
+author: "Stephen Kaluzny"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  html_document: 
+    keep_md: yes
+    theme: cerulean
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We explicitly install the required R packages from CRAN if they
+are not already available.
+
+```{r load_packages}
+library("assertr", quietly = TRUE, warn.conflicts = FALSE)
+library("tidyr", quietly = TRUE, warn.conflicts = FALSE)
+library("dplyr", quietly = TRUE, warn.conflicts = FALSE)
+library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
+```
+  
+## The Data
+
+The `here` package allows us to find files (in this case the raw data file)
+anywhere within the project tree.
+
+```{r read_data}
+d <- read.csv(here::here("data", "nyt.csv"), stringsAsFactors=FALSE)
+```
+
+The `Date` and `TimeOfDay` are combined and converted to a `POSIX` variable `DateTime`.
+The `WeekDay` is then computed from `DateTime`.
+The puzzle time (`Time`) was recorded as minutes:seconds,
+we convert that to a numeric `Seconds` variable.
+```{r date_time}
+d$Date <- as.Date(d$Date)
+d$DateTime <- as.POSIXct(with(d,
+  paste(Date, ifelse(is.na(TimeOfDay), "00:00", TimeOfDay))))
+d$WeekDay <- lubridate::wday(d$DateTime)
+d$TimeOfDayOrig <- d$TimeOfDay
+d$TimeOfDay <- hms::parse_hm(d$TimeOfDay)
+d$Seconds <- with(d, as.numeric(lubridate::seconds(lubridate::ms(Time))))
+```
+
+### Data Quality Check
+
+New data is regularly added to the CSV data file.
+In this section we do a quality check on the data to make sure no
+data entry errors have occurred.
+
+First, set some values that are expected in the data:
+
+```{r data_verification_0}
+# Current list of players:
+players <- c("SPK", "JAK", "JIK", "BBK", "SKK", "AKK", "MBH")
+# Earliest date:
+first_date <- as.Date("2017-09-25")
+# Upper bound on time (10 minutes = 600 seconds):
+time_bound <- 820
+```
+
+Check that Player is one of 5 possible values:
+```{r data_verification_1}
+d %>% assert(in_set(players), Player, success_fun=success_logical,
+  error_fun=error_logical)
+```
+
+There should be no missing values in the data:
+```{r data_verification_2}
+d %>% assert(not_na, DateTime, WeekDay, Seconds) %>% success_logical()
+```
+
+Only one observation per player per date:
+```{r data_verification_3}
+d %>% group_by(Date) %>% count(Player) %>% verify(n == 1) %>% success_logical()
+```
+
+Check for proper time values:
+```{r data_verification_4}
+d %>% assertr::verify(Seconds > 0 & Seconds < time_bound,
+  success_fun=success_logical, error_fun=error_logical)
+```
+
+Check range of dates
+```{r data_verification_5}
+first_date <- as.Date("2017-09-25")
+today <- Sys.Date()
+range(d$Date)
+d %>% 
+  assertr::verify(Date >= first_date & Date <= today,
+    success_fun=success_logical, error_fun=error_logical)
+```
