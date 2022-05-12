@@ -16,9 +16,7 @@ are not already available.
 
 ```{r load_packages}
 library("assertr", quietly = TRUE, warn.conflicts = FALSE)
-library("tidyr", quietly = TRUE, warn.conflicts = FALSE)
 library("dplyr", quietly = TRUE, warn.conflicts = FALSE)
-library("ggplot2", quietly = TRUE, warn.conflicts = FALSE)
 ```
   
 ## The Data
@@ -61,7 +59,7 @@ first_date <- as.Date("2017-09-25")
 time_bound <- 820
 ```
 
-Check that Player is one of 5 possible values:
+Check that Player is one of the `r length(players)` possible values:
 ```{r data_verification_1}
 d %>% assert(in_set(players), Player, success_fun=success_logical,
   error_fun=error_logical)
@@ -69,12 +67,16 @@ d %>% assert(in_set(players), Player, success_fun=success_logical,
 
 There should be no missing values in the data:
 ```{r data_verification_2}
-d %>% assert(not_na, DateTime, WeekDay, Seconds) %>% success_logical()
+# d %>% assert(not_na, DateTime, WeekDay, Seconds) %>% success_logical()
+d %>% assert(not_na, DateTime, WeekDay, Seconds,
+  success_fun= success_logical, error_fun=error_logical)
 ```
 
 Only one observation per player per date:
 ```{r data_verification_3}
-d %>% group_by(Date) %>% count(Player) %>% verify(n == 1) %>% success_logical()
+# d %>% group_by(Date) %>% count(Player) %>% verify(n == 1) %>% success_logical()
+d %>% group_by(Date) %>% count(Player) %>%
+  verify(n == 1, success_fun=success_logical, error_fun=error_logical)
 ```
 
 Check for proper time values:
