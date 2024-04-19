@@ -56,7 +56,7 @@ players <- c("SPK", "JAK", "JIK", "BBK", "SKK", "AKK", "MBH")
 # Earliest date:
 first_date <- as.Date("2017-09-25")
 # Upper bound on time (10 minutes = 600 seconds):
-time_bound <- 820
+time_bound <- 850
 ```
 
 Check that Player is one of the `r length(players)` possible values:
