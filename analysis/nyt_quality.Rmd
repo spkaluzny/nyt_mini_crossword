@@ -94,3 +94,8 @@ d %>%
   assertr::verify(Date >= first_date & Date <= today,
     success_fun=success_logical, error_fun=error_logical)
 ```
+
+Check number of clues values
+```{r number_clues}
+table(d$Clues, exclude=NULL)
+```
